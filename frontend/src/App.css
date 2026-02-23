@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-amber-50 text-stone-800 font-body;
+  }
+}
+
+@layer utilities {
+  .gold-border {
+    border-image: linear-gradient(90deg, #b8860b, #ffd700, #b8860b) 1;
+  }
+  .ornament::before,
+  .ornament::after {
+    content: '❧';
+    @apply text-amber-600 mx-2 opacity-60;
+  }
+}
