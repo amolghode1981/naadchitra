@@ -33,6 +33,8 @@ This is the index mapping of the instruments in the CSV. It is not yet foolproof
 Nonetheless, it is a good starting point for parsing the performers and their instruments from the CSV.
 TODO(Amol): Unify the way
 */
+type InstrumentSequence int
+
 const (
 	Pakhawaj             = 0
 	Manjira              = 2

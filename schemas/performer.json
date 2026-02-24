@@ -1,0 +1,42 @@
+{
+  "name": "Performer",
+  "enums": {
+    "PerformerType": {
+      "type": "enum",
+      "valueType": "string",
+      "values": [
+        { "name": "PerformerIndicatingTaala", "value": "indicating_taala" },
+        { "name": "PerformerDancer", "value": "dancer" },
+        { "name": "PerformerSinger", "value": "singer" },
+        { "name": "PerformerInstrumentalist", "value": "instrumentalist" }
+      ]
+    },
+    "Gender": {
+      "type": "enum",
+      "valueType": "string",
+      "values": [
+        { "name": "PerformerGenderMale", "value": "male" },
+        { "name": "PerformerGenderFemale", "value": "female" },
+        { "name": "PerformerGenderOther", "value": "other" }
+      ]
+    }
+  },
+  "object": {
+    "Performer": {
+      "type": "object",
+      "fields": [
+        { "name": "gender", "type": "Gender", "jsonKey": "gender" },
+        { "name": "type", "type": "PerformerType", "jsonKey": "type" },
+        { "name": "speculative_ethnicity", "type": "string", "jsonKey": "speculative_ethnicity", "optional": true },
+        { "name": "additionalNotes", "type": "string", "jsonKey": "additionalNotes", "optional": true },
+        {
+          "name": "instrument",
+          "type": "Instrument",
+          "jsonKey": "instrument",
+          "optional": true,
+          "comment": "Only applicable for instrumentalists"
+        }
+      ]
+    }
+  }
+}

@@ -3,9 +3,12 @@ package main
 import (
 	"NAADCHITRA/connectors"
 	knowledgerepo "NAADCHITRA/knowledgerepo/import"
+	"NAADCHITRA/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/rs/zerolog/log"
 )
 
 // Registry maps museum keys to their connectors
@@ -75,8 +78,14 @@ func museumsHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	paintings, err := knowledgerepo.ImportCSV("knowledgerepo/import/csv/met_550e8400-e29b-41d4-a716-446655440000.csv")
 	if err != nil {
-		fmt.Println("Error importing CSV:", err)
+		log.Error().Err(err).Msg("Failed to import CSV")
 		return
 	}
-	fmt.Println("Imported paintings:", len(paintings))
+
+	data, error := utils.ToPrettyJSON(paintings)
+	if error != nil {
+		log.Error().Err(error).Msg("Failed to convert paintings to JSON")
+		return
+	}
+	log.Info().Msgf("Parsed paintings: count=%d, data=%s", len(paintings), data)
 }

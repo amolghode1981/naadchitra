@@ -1,0 +1,83 @@
+{
+  "name": "Instrument",
+  "enums": {
+    "InstrumentType": {
+      "type": "enum",
+      "valueType": "string",
+      "values": [
+        { "name": "InstrumentClassChordophones", "value": "tanta" },
+        { "name": "InstrumentClassAerophones", "value": "sushira" },
+        { "name": "InstrumentClassMembranophones", "value": "avanaddha" },
+        { "name": "InstrumentClassIdiophone", "value": "ghana" }
+      ]
+    },
+    "InstrumentName": {
+      "type": "enum",
+      "valueType": "string",
+      "values": [
+        { "name": "InstrumentPakhawaj", "value": "pakhawaj" },
+        { "name": "InstrumentTabla", "value": "tabla" },
+        { "name": "InstrumentSitar", "value": "sitar" },
+        { "name": "InstrumentSarangi", "value": "sarangi" },
+        { "name": "InstrumentDholak", "value": "dholak" },
+        { "name": "InstrumentManjira", "value": "manjira" },
+        { "name": "InstrumentBeen", "value": "been" },
+        { "name": "InstrumentRabab", "value": "rabab" },
+        { "name": "InstrumentTambora", "value": "tambora" }
+      ]
+    },
+    "PlayingTechnique": {
+      "type": "enum",
+      "valueType": "string",
+      "values": [
+        { "name": "PlayingTechniqueFingerPlucked", "value": "finger_plucked" },
+        { "name": "PlayingTechniqueBowed", "value": "bowing" },
+        { "name": "PlayingTechniqueHandStruck", "value": "hand_struck" },
+        { "name": "PlayingTechniqueMalletStruck", "value": "mallet_struck" },
+        { "name": "PlayingTechniqueObjectToObjectStruck", "value": "object_to_object_struck" },
+        { "name": "PlayingTechniqueBlown", "value": "blown" }
+      ]
+    }
+  },
+  "object": {
+    "Instrument": {
+      "type": "object",
+      "fields": [
+        { "name": "name", "type": "InstrumentName", "jsonKey": "name" },
+        { "name": "class", "type": "InstrumentType", "jsonKey": "class" },
+        { "name": "playing_technique", "type": "PlayingTechnique", "jsonKey": "playing_technique" }
+      ],
+      "presets": [
+        {
+          "name": "Pakhawaj",
+          "values": {
+            "name": "pakhawaj",
+            "class": "avanaddha",
+            "playing_technique": "hand_struck"
+          }
+        }
+      ]
+    }
+  },
+  "csv": {
+    "comment": "InstrumentSequence reflects the column index positions of instruments in the CSV import format. This is specific to CSV parsing and is not part of the core instrument type system.",
+    "InstrumentSequence": {
+      "type": "enum",
+      "valueType": "integer",
+      "values": [
+        { "name": "Pakhawaj", "value": 0 },
+        { "name": "Manjira", "value": 2 },
+        { "name": "Been", "value": 4 },
+        { "name": "Rabab", "value": 6 },
+        { "name": "Tambora", "value": 8 },
+        { "name": "Singer", "value": 10 },
+        { "name": "Sitar", "value": 12 },
+        { "name": "Sarangi", "value": 14 },
+        { "name": "Dholak", "value": 16 },
+        { "name": "Tabla", "value": 18 },
+        { "name": "Additional", "value": 20 },
+        { "name": "TaalIndicatingPerson", "value": 21 }
+      ]
+    }
+  }
+}

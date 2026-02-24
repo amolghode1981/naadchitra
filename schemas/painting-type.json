@@ -1,0 +1,13 @@
+{
+  "name": "PaintingType",
+  "type": "enum",
+  "values": [
+    { "name": "RaagMala", "intValue": 1, "stringValue": "raag_mala" },
+    { "name": "CourtScene", "intValue": 2, "stringValue": "court_scene" },
+    { "name": "CommonLife", "intValue": 3, "stringValue": "common_life" },
+    { "name": "War", "intValue": 4, "stringValue": "war" },
+    { "name": "SceneWithGods", "intValue": 5, "stringValue": "scene_with_gods" },
+    { "name": "Personal", "intValue": 6, "stringValue": "personal" },
+    { "name": "NonCourtGathering", "intValue": 7, "stringValue": "non_court_gathering" }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Painting",
+  "comment": "Represents a painting object with its musical and cultural semantic links. The musicalSemanticNotesId and culturalSemanticNotesId are crucial fields that link to expert-created records representing the core knowledge of the painting and music making.",
+  "object": {
+    "Painting": {
+      "type": "object",
+      "fields": [
+        { "name": "objectID", "type": "string", "jsonKey": "objectID", "comment": "Auto generated UUID" },
+        { "name": "museumObjectID", "type": "string", "jsonKey": "museumObjectID" },
+        { "name": "url", "type": "string", "jsonKey": "url", "optional": true },
+        { "name": "museum", "type": "string", "jsonKey": "museum" },
+        { "name": "dynasty", "type": "string", "jsonKey": "dynasty" },
+        { "name": "date", "type": "string", "jsonKey": "date" },
+        { "name": "performers", "type": "array", "items": "Performer", "jsonKey": "performers", "optional": true },
+        { "name": "painter", "type": "string", "jsonKey": "painter", "optional": true },
+        { "name": "typeOfPainting", "type": "PaintingTypeString", "jsonKey": "typeOfPainting", "optional": true },
+        { "name": "nameOfThePainter", "type": "string", "jsonKey": "nameOfThePainter", "optional": true },
+        { "name": "notes", "type": "string", "jsonKey": "notes", "optional": true },
+        {
+          "name": "musicalSemanticNotesId",
+          "type": "string",
+          "jsonKey": "musicalSemanticNotesId",
+          "optional": true,
+          "comment": "Object ID of the musical semantic notes record created by domain experts. Links to the core musical knowledge of the painting."
+        },
+        {
+          "name": "culturalSemanticNotesId",
+          "type": "string",
+          "jsonKey": "culturalSemanticNotesId",
+          "optional": true,
+          "comment": "Object ID of the cultural semantic notes record created by domain experts. Links to the core cultural knowledge of the painting."
+        },
+        {
+          "name": "audioVisualReferenceNotesIds",
+          "type": "array",
+          "items": "string",
+          "jsonKey": "audioVisualReferenceNotesIds",
+          "comment": "List of object IDs of audio-visual references added by the musician."
+        }
+      ]
+    }
+  }
+}
