@@ -5,27 +5,31 @@ A web application for exploring museum collection APIs, built with a Go backend 
 ## Project Structure
 
 ```
-museum-project/
-├── backend/                  # Go API server
-│   ├── main.go               # HTTP server, routes, registry
-│   ├── go.mod
-│   └── connectors/
-│       ├── connector.go      # Connector interface + ArtObject struct
-│       └── met.go            # Metropolitan Museum of Art connector
-└── frontend/                 # React + Vite + Tailwind
-    ├── index.html
-    ├── package.json
-    ├── tailwind.config.js
-    ├── postcss.config.js
-    ├── vite.config.js
-    └── src/
-        ├── main.jsx
-        ├── App.jsx
-        ├── App.css
-        └── components/
-            ├── MuseumSearch.jsx
-            ├── ArtworkCard.jsx
-            └── ErrorMessage.jsx
+NAADCHITRA/
+├── connectors/               # External service connectors/integrations
+├── frontend/                 # Frontend application
+├── knowledgerepo/            # Core knowledge repository module
+│   ├── import/               # Data import logic
+│   │   ├── csv/              # CSV source files for bulk import
+│   │   └── import_csv.go     # CSV import handler
+│   ├── types/                # Domain model definitions
+│   │   ├── instrument.go     # Instrument type
+│   │   ├── painting-type.go  # Painting category/type
+│   │   ├── painting.go       # Painting type
+│   │   └── performer.go      # Performer type
+│   ├── schemas/              # JSON schemas for data validation
+│   │   ├── instrument.json
+│   │   ├── painting-type.json
+│   │   ├── painting.json
+│   │   └── performer.json
+│   ├── utils/                # Shared utilities
+│   │   ├── jsonhelper.go     # JSON parsing/serialization helpers
+│   │   └── logger.go         # Logging utility
+│   ├── go.mod                # Go module definition
+│   └── go.sum                # Dependency lock file
+├── main.go                   # Application entry point
+├── README.md
+└── TODO.md
 ```
 
 ## Prerequisites
@@ -90,3 +94,8 @@ var registry = map[string]connectors.Connector{
 - **Frontend:** React 19, Vite, Tailwind CSS
 - **Design:** Indian miniature painting palette — lapis, saffron, gold, ivory
 - **Wireframes & Initial Design:** Basic wireframes and component structure designed using [Claude](https://claude.ai) by Anthropic
+
+## Coding conventions
+- Type should be designed to represent a single object.
+- Type names will be singular. Same typename will be used for the JSON schema.
+- Hyphen should be used in the filenames.
