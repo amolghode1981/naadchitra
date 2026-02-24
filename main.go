@@ -2,9 +2,9 @@ package main
 
 import (
 	"NAADCHITRA/connectors"
+	knowledgerepo "NAADCHITRA/knowledgerepo/import"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -64,10 +64,19 @@ func museumsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(keys)
 }
 
-func main() {
-	http.HandleFunc("/api/object", corsMiddleware(objectHandler))
-	http.HandleFunc("/api/museums", corsMiddleware(museumsHandler))
+// func main() {
+// 	http.HandleFunc("/api/object", corsMiddleware(objectHandler))
+// 	http.HandleFunc("/api/museums", corsMiddleware(museumsHandler))
 
-	log.Println("Backend running at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+// 	log.Println("Backend running at http://localhost:8080")
+// 	log.Fatal(http.ListenAndServe(":8080", nil))
+// }
+
+func main() {
+	paintings, err := knowledgerepo.ImportCSV("knowledgerepo/import/csv/met_550e8400-e29b-41d4-a716-446655440000.csv")
+	if err != nil {
+		fmt.Println("Error importing CSV:", err)
+		return
+	}
+	fmt.Println("Imported paintings:", len(paintings))
 }
