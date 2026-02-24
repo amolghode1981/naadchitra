@@ -35,19 +35,7 @@ func ImportCSV(filePath string) ([]types.Painting, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse row: %w", err)
 		}
-		// painting := types.Painting{
-		// 	ObjectId:                     parseInt(row[0]),
-		// 	MuseumObjectId:               row[1],
-		// 	Museum:                       row[2],
-		// 	Dynasty:                      row[3],
-		// 	Date:                         row[4],
-		// 	Painter:                      row[5],
-		// 	MusicalSematicNotesId:        row[6],
-		// 	CulturalSemanticNotesId:      row[7],
-		// 	AudioVisualReferenceNotesIds: parseAudioVisualReferences(row[8]),
-		// }
 		paintings = append(paintings, painting)
 	}
-
 	return paintings, nil
 }

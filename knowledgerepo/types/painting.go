@@ -50,14 +50,9 @@ func (m *Painting) ParseRow(row []string) (Painting, error) {
 
 	n, err := strconv.Atoi(row[29])
 	if err == nil {
-		m.TypeOfPainting = PaintingTypeString(PaintingType(n).String())
+		m.TypeOfPainting = PaintingTypeByInt[n].StringValue
 	}
 	m.NameOfThePainter = row[30]
 	m.Notes = row[31]
 	return *m, nil
 }
-
-// func parsePerformers(columns []string) ([]Performer, error) {
-// 	fmt.Println(columns)
-// 	return []Performer{}, nil
-// }

@@ -1,6 +1,10 @@
 package types
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/rs/zerolog/log"
+)
 
 type PerformerType string
 
@@ -284,11 +288,10 @@ func ParsePerformers(instruments []string) ([]Performer, error) {
 		default:
 			// Handle other instruments or skip
 		}
-		fmt.Println("Performer index", index, ":", performer)
+		log.Debug().Msgf("Parsed performer: index=%d, performer=%+v", index, performer)
 		if done {
 			break
 		}
 	}
-	fmt.Println("Performers ", performers)
 	return performers, nil
 }
