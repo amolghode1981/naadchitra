@@ -1,0 +1,13 @@
+Neural network training:
+https://youtu.be/IHZwWFHWa-w
+Mnist
+1. Cost of a single training example : Cost of the bad detection: Such an elegantly simple concept. The expected value was activation for 3, but the result activated 1,5 and 8 and 9. The cost will be small when the network classifies the input correctly.
+The cost is the square of the difference of the actual and expected value.
+- Average cost over all the training data. You want to minimize this.
+- How to change the waits and biases to get it better? - Gradient of a function gives steepest ascent. So move towards the direction opposite to it.
+http://neuralnetworksanddeeplearning.com/
+
+https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent
+https://developers.google.com/machine-learning/crash-course/prereqs-and-prework
+
+Backpropogation

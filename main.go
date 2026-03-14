@@ -2,13 +2,17 @@ package main
 
 import (
 	"NAADCHITRA/connectors"
-	knowledgerepo "NAADCHITRA/knowledgerepo/import"
-	"NAADCHITRA/utils"
+	// pb "NAADCHITRA/prediction_rpc"
+	pb "NAADCHITRA/meghdoot/output/prediction"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/rs/zerolog/log"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // Registry maps museum keys to their connectors
@@ -75,17 +79,52 @@ func museumsHandler(w http.ResponseWriter, r *http.Request) {
 // 	log.Fatal(http.ListenAndServe(":8080", nil))
 // }
 
+// func main() {
+// 	paintings, err := knowledgerepo.ImportCSV("knowledgerepo/import/csv/met_550e8400-e29b-41d4-a716-446655440000.csv")
+// 	if err != nil {
+// 		log.Error().Err(err).Msg("Failed to import CSV")
+// 		return
+// 	}
+
+// 	data, error := utils.ToPrettyJSON(paintings)
+// 	if error != nil {
+// 		log.Error().Err(error).Msg("Failed to convert paintings to JSON")
+// 		return
+// 	}
+// 	log.Info().Msgf("Parsed paintings: count=%d, data=%s", len(paintings), data)
+// }
+
 func main() {
-	paintings, err := knowledgerepo.ImportCSV("knowledgerepo/import/csv/met_550e8400-e29b-41d4-a716-446655440000.csv")
+	// Connect to server
+	conn, err := grpc.Dial(
+		"localhost:50051",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to import CSV")
-		return
+		log.Fatal().Err(err).Msg("Failed to connect")
+	}
+	// Run this when function exits.
+	defer conn.Close()
+
+	// Create client stub
+	client := pb.NewAskKosambiClient(conn)
+
+	// Set timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Call guessPaintingStyle
+	resp, err := client.GuessPaintingStyle(
+		ctx,
+		&pb.StylePredictionRequest{
+			PaintingUrl: "https://www.metmuseum.org/art/collection/search/50939",
+		},
+	)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to call")
 	}
 
-	data, error := utils.ToPrettyJSON(paintings)
-	if error != nil {
-		log.Error().Err(error).Msg("Failed to convert paintings to JSON")
-		return
+	for _, style := range resp.Styles {
+		log.Printf("Style: %s Confidence: %d", style.Style, style.Confidence)
 	}
-	log.Info().Msgf("Parsed paintings: count=%d, data=%s", len(paintings), data)
 }

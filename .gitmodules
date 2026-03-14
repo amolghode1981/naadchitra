@@ -1,0 +1,3 @@
+[submodule "meghdoot"]
+	path = meghdoot
+	url = git@github.com:amolghode1981/meghdoot.git
