@@ -99,3 +99,15 @@ var registry = map[string]connectors.Connector{
 - Type should be designed to represent a single object.
 - Type names will be singular. Same typename will be used for the JSON schema.
 - Hyphen should be used in the filenames.
+
+## Technical notes
+**AI assisted image analysis**
+- Code interacts with AI code using GRPC. Details of what AI is suppose to do are still developing. Though one important thing it should do is use a vision model on the miniature paintings to find out details.
+- AI systems so far, still do not objects from Indian miniature paintings with acceptable accuracy. Expecting them to recognize music making and musical instrument is yet to be achieved. Though with the limiated accuracy, the system can still be made effective by running the first iteration through the vision models and later submitted for expert review.
+- Project that facilitates this is called Kosambi, https://github.com/amolghode1981/kosambi
+- How it does that, what models are used are concealed from NaadChitra.
+- It is accessed using gRPC. IDLs and protofiles are a part of project meghdoot https://github.com/amolghode1981/meghdoot
+- meghdoot project is added as a submodule to this project.
+- Use `git clone --recurse-submodules git@github.com:amolghode1981/naadchitra.git` to also pull the files for the submodule.
+- Use `make rpc t=go` to generate go stubs from the proto files. This would create a directory called `meghdoot/output`.
+- After this rpc client and data could be imported for use.
