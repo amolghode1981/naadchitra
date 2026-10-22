@@ -2,17 +2,20 @@ package main
 
 import (
 	"NAADCHITRA/connectors"
-	"io"
-	"os"
+	"context"
 	"path"
+	"time"
 
-	// pb "NAADCHITRA/prediction_rpc"
+	pb "NAADCHITRA/meghdoot/output/prediction"
 
-	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/rs/zerolog/log"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // Registry maps museum keys to their connectors
@@ -90,58 +93,58 @@ func extractLastPart(rawURL string) string {
 	return path.Base(u.Path)
 }
 
-func main() {
-	//inFile, err := os.Open("knowledgerepo/import/csv/cleveland_550e8400-e29b-41d4-a716-446655440000_back.csv")
-	inFile, err := os.Open("knowledgerepo/import/csv/cleveland_base.csv")
-	// inFile, err := os.Open("knowledgerepo/import/csv/met_550e8400-e29b-41d4-a716-446655440000.csv")
-	if err != nil {
-		panic(err)
-	}
-	defer inFile.Close()
+// func main() {
+// 	//inFile, err := os.Open("knowledgerepo/import/csv/cleveland_550e8400-e29b-41d4-a716-446655440000_back.csv")
+// 	inFile, err := os.Open("knowledgerepo/import/csv/cleveland_base.csv")
+// 	// inFile, err := os.Open("knowledgerepo/import/csv/met_550e8400-e29b-41d4-a716-446655440000.csv")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	defer inFile.Close()
 
-	outFile, err := os.Create("knowledgerepo/import/csv/cleveland_output.csv")
-	if err != nil {
-		panic(err)
-	}
-	defer outFile.Close()
+// 	outFile, err := os.Create("knowledgerepo/import/csv/cleveland_output.csv")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	defer outFile.Close()
 
-	reader := csv.NewReader(inFile)
-	reader.FieldsPerRecord = -1
-	writer := csv.NewWriter(outFile)
-	defer writer.Flush()
+// 	reader := csv.NewReader(inFile)
+// 	reader.FieldsPerRecord = -1
+// 	writer := csv.NewWriter(outFile)
+// 	defer writer.Flush()
 
-	for {
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			panic(err)
-		}
+// 	for {
+// 		record, err := reader.Read()
+// 		if err == io.EOF {
+// 			break
+// 		}
+// 		if err != nil {
+// 			panic(err)
+// 		}
 
-		// Ensure at least 3 columns
-		if len(record) < 3 {
-			continue
-		}
+// 		// Ensure at least 3 columns
+// 		if len(record) < 3 {
+// 			continue
+// 		}
 
-		// Step 1: Replace column 1 with extracted value from URL (column 2)
-		if record[1] == "" && record[2] != "" {
-			record[1] = extractLastPart(record[2])
-		}
+// 		// Step 1: Replace column 1 with extracted value from URL (column 2)
+// 		if record[1] == "" && record[2] != "" {
+// 			record[1] = extractLastPart(record[2])
+// 		}
 
-		// Step 2: Replace empty fields with "3"
-		for i := range record {
-			if record[i] == "" {
-				record[i] = "3"
-			}
-		}
+// 		// Step 2: Replace empty fields with "3"
+// 		for i := range record {
+// 			if record[i] == "" {
+// 				record[i] = "3"
+// 			}
+// 		}
 
-		err = writer.Write(record)
-		if err != nil {
-			panic(err)
-		}
-	}
-}
+// 		err = writer.Write(record)
+// 		if err != nil {
+// 			panic(err)
+// 		}
+// 	}
+// }
 
 // func main() {
 // 	// paintings, err := knowledgerepo.ImportCSV("knowledgerepo/import/csv/met_550e8400-e29b-41d4-a716-446655440000.csv")
@@ -178,53 +181,54 @@ func main() {
 // 	// log.Info().Msgf("Parsed paintings: count=%d, data=%s", len(paintings), data)
 // }
 
-// func main() {
-// 	// Connect to server
-// 	conn, err := grpc.Dial(
-// 		"localhost:50051",
-// 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-// 	)
-// 	if err != nil {
-// 		log.Fatal().Err(err).Msg("Failed to connect")
-// 	}
-// 	// Run this when function exits.
-// 	defer conn.Close()
+func main() {
+	// Connect to server
+	conn, err := grpc.Dial(
+		"localhost:50053",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to connect")
+	}
+	// Run this when function exits.
+	defer conn.Close()
 
-// 	// Create client stub
-// 	client := pb.NewAskKosambiClient(conn)
+	// Create client stub
+	client := pb.NewAskKosambiClient(conn)
 
-// 	// Set timeout
-// 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-// 	defer cancel()
+	// Set timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+	defer cancel()
 
-// 	// // Call guessPaintingStyle
-// 	// resp, err := client.GuessPaintingStyle(
-// 	// 	ctx,
-// 	// 	&pb.StylePredictionRequest{
-// 	// 		PaintingUrl: "https://www.metmuseum.org/art/collection/search/50939",
-// 	// 	},
-// 	// )
-// 	// if err != nil {
-// 	// 	log.Fatal().Err(err).Msg("Failed to call")
-// 	// }
+	// // Call guessPaintingStyle
+	// resp, err := client.GuessPaintingStyle(
+	// 	ctx,
+	// 	&pb.StylePredictionRequest{
+	// 		PaintingUrl: "https://www.metmuseum.org/art/collection/search/50939",
+	// 	},
+	// )
+	// if err != nil {
+	// 	log.Fatal().Err(err).Msg("Failed to call")
+	// }
 
-// 	// for _, style := range resp.Styles {
-// 	// 	log.Printf("Style: %s Confidence: %d", style.Style, style.Confidence)
-// 	// }
+	// for _, style := range resp.Styles {
+	// 	log.Printf("Style: %s Confidence: %d", style.Style, style.Confidence)
+	// }
 
-// 	// Call guessPaintingStyle
-// 	resp, err := client.GuessMusicMaking(
-// 		ctx,
-// 		&pb.MusicPredictionRequest{
-// 			// predicted yes expected yes PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DP153182.jpg",
-// 			// predicted no expected no PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DP112943.jpg",
-// 			// predicted yes expected yes  PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DT4984.jpg",
-// 			// predicted yes expected no PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DP152284.jpg",
-// 		},
-// 	)
-// 	if err != nil {
-// 		log.Fatal().Err(err).Msg("Failed to call")
-// 	}
+	// Call guessPaintingStyle
+	resp, err := client.GuessMusicMaking(
+		ctx,
+		&pb.MusicPredictionRequest{
+			PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DP153182.jpg",
+			// predicted yes expected yes PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DP153182.jpg",
+			// predicted no expected no PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DP112943.jpg",
+			// predicted yes expected yes  PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DT4984.jpg",
+			// predicted yes expected no PaintingUrl: "https://images.metmuseum.org/CRDImages/as/original/DP152284.jpg",
+		},
+	)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to call")
+	}
 
-// 	log.Debug().Msgf("MusicMakingDepicted: %v Confidence: %d", resp.MusicMakingDepicted, resp.Confidence)
-// }
+	log.Debug().Msgf("MusicMakingDepicted: %v Confidence: %d", resp.MusicMakingDepicted, resp.Confidence)
+}
