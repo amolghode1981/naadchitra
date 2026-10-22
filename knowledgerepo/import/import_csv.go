@@ -20,7 +20,7 @@ func ImportCSV(filePath string) ([]types.Painting, error) {
 
 	// Create a CSV reader
 	reader := csv.NewReader(file)
-
+	reader.FieldsPerRecord = -1
 	// Read all rows at once
 	rows, err := reader.ReadAll()
 	if err != nil {
@@ -33,6 +33,7 @@ func ImportCSV(filePath string) ([]types.Painting, error) {
 		var painting types.Painting
 		painting, err := painting.ParseRow(row)
 		if err != nil {
+			print(row)
 			return nil, fmt.Errorf("failed to parse row: %w", err)
 		}
 		paintings = append(paintings, painting)

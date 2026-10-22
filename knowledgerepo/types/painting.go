@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+	"path"
 	"strconv"
 
 	"github.com/google/uuid"
@@ -10,6 +12,7 @@ type Painting struct {
 	ObjectId         string             `json:"objectID"`
 	MuseumObjectId   string             `json:"museumObjectID"`
 	URL              string             `json:"url,omitempty"`
+	ImageUrl         string             `json:"url,omitempty"`
 	Museum           string             `json:"museum"`
 	Dynasty          string             `json:"dynasty"`
 	Date             string             `json:"date"`
@@ -31,12 +34,18 @@ type Painting struct {
 
 // Row Collection,Source,Approx Date,Dynesty,Pakhawaj,Taal indicating person,Manjira,Been,Rabab,Tambur/Tambora,Singer,Sitar,Sarangi,Dholak,Tabla,Additional instruments,Gender of the performers,Type of painting,Name of the artist if available,Comments
 func (m *Painting) ParseRow(row []string) (Painting, error) {
+	fmt.Println(row)
 	m.ObjectId = uuid.New().String()
 	m.Museum = row[0]
-	m.MuseumObjectId = row[1]
+	objectId := ""
+	if len(row[1]) == 0 {
+		objectId = path.Base(row[2])
+	}
+	m.MuseumObjectId = objectId
 	m.URL = row[2]
 	m.Date = row[3]
 	m.Dynasty = row[4]
+	m.ImageUrl = ""
 
 	// Slice from 5 to 28 for the performers and their instruments.
 	// 28 is not included.
@@ -54,5 +63,6 @@ func (m *Painting) ParseRow(row []string) (Painting, error) {
 	}
 	m.NameOfThePainter = row[30]
 	m.Notes = row[31]
+	fmt.Println("returning")
 	return *m, nil
 }

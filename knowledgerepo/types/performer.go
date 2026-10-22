@@ -2,8 +2,6 @@ package types
 
 import (
 	"fmt"
-
-	"github.com/rs/zerolog/log"
 )
 
 type PerformerType string
@@ -180,6 +178,19 @@ func getGenderFromColumn(value string) (Gender, error) {
 	}
 }
 
+func getGenderFromColumnTemp(value string) (Gender, error) {
+	switch value {
+	case "0":
+		return PerformerGenderFemale, nil
+	case "1":
+		return PerformerGenderMale, nil
+	case "2":
+		return PerformerGenderOther, nil
+	default:
+		return PerformerGenderOther, nil
+	}
+}
+
 func ParsePerformers(instruments []string) ([]Performer, error) {
 	var performers []Performer
 	var index int = 0
@@ -288,7 +299,7 @@ func ParsePerformers(instruments []string) ([]Performer, error) {
 		default:
 			// Handle other instruments or skip
 		}
-		log.Debug().Msgf("Parsed performer: index=%d, performer=%+v", index, performer)
+		// log.Debug().Msgf("Parsed performer: index=%d, performer=%+v", index, performer)
 		if done {
 			break
 		}
