@@ -1,6 +1,14 @@
 # Museum Collection Explorer
 
-A web application for exploring museum collection APIs, built with a Go backend and React frontend.
+A web application for exploring museum collection APIs, built with a Go backend and React frontend. Currently, it is not configured to work end to end. The expected Userflow would be
+1. User will see museum specific images on UI.
+2. Upon selecting one, code will communicate with the AI subsystem using gRPC.
+3. AI subsystem will ask the model (Or chain of models) for a particular type of inference.
+4. The result will be returned back to the user.
+
+The RPC code is https://github.com/amolghode1981/meghdoot and the LLM pipeline is https://github.com/amolghode1981/kosambi
+
+At the current state, code is capable of querying whether the music making activity is happening or not.
 
 ## Project Structure
 
